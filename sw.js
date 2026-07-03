@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bookapp-v3';
+const CACHE_NAME = 'bookapp-v4';
 const ASSETS = [
   './',
   './index.html',

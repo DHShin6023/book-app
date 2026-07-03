@@ -1,6 +1,6 @@
 {
-  "name": "책갈피 AI - 도서 추천",
-  "short_name": "책갈피 AI",
+  "name": "북 큐레이션 - 도서 추천",
+  "short_name": "북 큐레이션",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#FAF6F0",

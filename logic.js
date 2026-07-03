@@ -45,7 +45,18 @@
     return doc ? 'https://covers.openlibrary.org/b/id/' + doc.cover_i + '-M.jpg' : null;
   }
 
-  const api = { normalizeWord, canAddWord, canRecommend, extractJSON, validateBooks, pickOpenLibraryCover };
+  function buildShareText(words, books, appUrl) {
+    const lines = ['📚 북 큐레이션 - AI 도서 추천', ''];
+    if (words.length) lines.push('내가 고른 단어: ' + words.join(', '), '');
+    books.forEach((b, i) => {
+      lines.push((i + 1) + '. ' + b.title + ' — ' + b.author);
+      if (b.reason) lines.push('   ' + b.reason);
+    });
+    lines.push('', '👉 ' + appUrl);
+    return lines.join('\n');
+  }
+
+  const api = { normalizeWord, canAddWord, canRecommend, extractJSON, validateBooks, pickOpenLibraryCover, buildShareText };
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;
   } else {

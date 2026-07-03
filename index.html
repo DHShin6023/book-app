@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>책갈피 AI - 도서 추천</title>
+  <title>북 큐레이션 - 도서 추천</title>
   <meta name="theme-color" content="#5B4636">
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
@@ -17,8 +17,11 @@
   <!-- 메인 화면 -->
   <div id="view-main" class="view active">
     <header>
-      <h1>📚 책갈피 AI</h1>
-      <button id="btn-settings-open" class="icon-btn" aria-label="설정">⚙️</button>
+      <h1>📚 북 큐레이션</h1>
+      <div class="header-btns">
+        <button id="btn-reset" class="icon-btn" aria-label="처음부터 다시">🔄</button>
+        <button id="btn-settings-open" class="icon-btn" aria-label="설정">⚙️</button>
+      </div>
     </header>
     <p class="subtitle">지금 마음에 드는 단어를 3~10개 입력하면<br>어울리는 책을 추천해드려요</p>
 
@@ -41,6 +44,10 @@
 
     <div id="error-box" class="hidden"></div>
     <div id="results"></div>
+    <div id="result-actions" class="hidden">
+      <button id="btn-share" class="primary-btn">📤 추천 목록 공유하기</button>
+      <button id="btn-reset-bottom" class="outline-btn">🔄 새로운 단어로 다시 추천받기</button>
+    </div>
   </div>
 
   <!-- 설정 화면 -->

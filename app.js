@@ -73,6 +73,7 @@ document.getElementById('btn-save-settings').addEventListener('click', () => {
 
 // ===== 단어 칩 =====
 let words = [];
+let lastResult = null; // 마지막 추천 결과 (공유용)
 const inputWord = document.getElementById('input-word');
 const btnAddWord = document.getElementById('btn-add-word');
 const btnRecommend = document.getElementById('btn-recommend');
@@ -193,6 +194,7 @@ async function fetchCover(book) {
 
 function renderResults(books, covers) {
   const box = document.getElementById('results');
+  document.getElementById('result-actions').classList.remove('hidden');
   box.innerHTML = books.map((b, i) => {
     const cover = covers[i]
       ? `<img src="${escapeHTML(covers[i])}" alt="${escapeHTML(b.title)} 표지">`
@@ -231,6 +233,7 @@ async function recommend() {
   document.getElementById('loading').classList.remove('hidden');
   document.getElementById('error-box').classList.add('hidden');
   document.getElementById('results').innerHTML = '';
+  document.getElementById('result-actions').classList.add('hidden');
 
   try {
     let books = null;
@@ -248,6 +251,7 @@ async function recommend() {
       return;
     }
     const covers = await Promise.all(books.map(fetchCover));
+    lastResult = { words: words.slice(), books };
     renderResults(books, covers);
   } catch (e) {
     if (e.status === 401) showError('API 키가 올바르지 않습니다. 설정에서 키를 확인해주세요.');
@@ -265,3 +269,44 @@ async function recommend() {
 }
 
 btnRecommend.addEventListener('click', recommend);
+
+// ===== 리셋 =====
+function resetAll() {
+  words = [];
+  lastResult = null;
+  inputWord.value = '';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('result-actions').classList.add('hidden');
+  document.getElementById('error-box').classList.add('hidden');
+  renderChips();
+  showView('main');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast('새로운 단어를 입력해보세요!');
+}
+
+document.getElementById('btn-reset').addEventListener('click', resetAll);
+document.getElementById('btn-reset-bottom').addEventListener('click', resetAll);
+
+// ===== 공유 =====
+const APP_URL = 'https://dhshin6023.github.io/book-app/';
+
+async function shareResults() {
+  if (!lastResult) return;
+  const text = L.buildShareText(lastResult.words, lastResult.books, APP_URL);
+  if (navigator.share) {
+    try {
+      await navigator.share({ text });
+    } catch (e) { /* 사용자가 공유 시트를 닫음 */ }
+  } else if (navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('추천 목록이 복사되었습니다. 원하는 곳에 붙여넣으세요.');
+    } catch (e) {
+      showToast('복사하지 못했습니다. 다시 시도해주세요.');
+    }
+  } else {
+    showToast('이 브라우저는 공유를 지원하지 않아요.');
+  }
+}
+
+document.getElementById('btn-share').addEventListener('click', shareResults);

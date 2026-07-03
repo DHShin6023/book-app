@@ -20,6 +20,7 @@ body {
 header { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 16px; }
 header h1 { font-size: 22px; color: var(--brown); }
 .icon-btn, .back-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--brown); }
+.header-btns { display: flex; gap: 16px; }
 .subtitle { text-align: center; color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
 
 .word-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
@@ -48,6 +49,12 @@ header h1 { font-size: 22px; color: var(--brown); }
   background: var(--brown); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer;
 }
 .primary-btn:disabled { background: #CBBFAF; cursor: default; }
+
+#result-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.outline-btn {
+  width: 100%; padding: 14px; border: 1.5px solid var(--brown); border-radius: 14px;
+  background: none; color: var(--brown); font-size: 16px; font-weight: 600; cursor: pointer;
+}
 
 .hidden { display: none !important; }
 #loading { text-align: center; padding: 36px 0; color: var(--muted); }

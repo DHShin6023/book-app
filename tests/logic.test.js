@@ -46,4 +46,20 @@ assert.strictEqual(L.pickOpenLibraryCover({ docs: [{ title: 'no cover' }] }), nu
 assert.strictEqual(L.pickOpenLibraryCover({}), null);
 assert.strictEqual(L.pickOpenLibraryCover(null), null);
 
+// buildShareText: 단어+추천 도서 목록을 공유용 텍스트로 변환
+const shareText = L.buildShareText(
+  ['여행', '고독'],
+  [
+    { title: '데미안', author: '헤르만 헤세', originalTitle: 'Demian', reason: '이유', summary: '요약' },
+    { title: '한국책', author: '김작가', originalTitle: '', reason: '', summary: '' }
+  ],
+  'https://dhshin6023.github.io/book-app/'
+);
+assert.ok(shareText.includes('북 큐레이션'));
+assert.ok(shareText.includes('여행, 고독'));
+assert.ok(shareText.includes('1. 데미안 — 헤르만 헤세'));
+assert.ok(shareText.includes('2. 한국책 — 김작가'));
+assert.ok(shareText.includes('https://dhshin6023.github.io/book-app/'));
+assert.strictEqual(L.buildShareText([], [], 'url').includes('undefined'), false);
+
 console.log('✅ 모든 로직 테스트 통과');
