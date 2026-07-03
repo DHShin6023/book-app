@@ -13,7 +13,13 @@ function getSetting(key, def) {
   return v === null ? def : v;
 }
 function setSetting(key, val) {
-  localStorage.setItem('bookapp_' + key, val);
+  try {
+    localStorage.setItem('bookapp_' + key, val);
+    return true;
+  } catch (e) {
+    console.warn('localStorage 저장 실패', e);
+    return false;
+  }
 }
 
 function showToast(msg, duration = 2200) {
@@ -36,7 +42,7 @@ document.querySelectorAll('.back-btn').forEach(btn => {
 const MODELS = [
   { id: 'openrouter/free', name: '자동 무료 모델 (기본)' },
   { id: 'google/gemma-4-31b-it:free', name: 'Gemma 4 31B (무료)' },
-  { id: 'meta-llama/llama-4-scout:free', name: 'Llama 4 Scout (무료)' },
+  { id: 'meta-llama/llama-3.3-70b-instruct:free', name: 'Llama 3.3 70B (무료)' },
   { id: 'anthropic/claude-sonnet-4.6', name: 'Claude Sonnet 4.6 (유료·고품질)' }
 ];
 const selectModel = document.getElementById('select-model');
@@ -55,10 +61,14 @@ document.getElementById('btn-settings-open').addEventListener('click', () => {
 });
 
 document.getElementById('btn-save-settings').addEventListener('click', () => {
-  setSetting('api_key', document.getElementById('input-api-key').value.trim());
-  setSetting('model', selectModel.value);
-  showToast('설정이 저장되었습니다.');
-  showView('main');
+  const saveApiKey = setSetting('api_key', document.getElementById('input-api-key').value.trim());
+  const saveModel = setSetting('model', selectModel.value);
+  if (saveApiKey && saveModel) {
+    showToast('설정이 저장되었습니다.');
+    showView('main');
+  } else {
+    showToast('설정을 저장하지 못했습니다. 사파리 개인정보 보호 모드에서는 저장되지 않아요.');
+  }
 });
 
 // ===== 단어 칩 =====
@@ -139,7 +149,7 @@ async function callOpenRouter(apiKey, model, prompt) {
     body: JSON.stringify({
       model,
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: 2000
+      max_tokens: 3000
     })
   });
   if (!response.ok) {
@@ -233,6 +243,7 @@ async function recommend() {
     if (e.status === 401) showError('API 키가 올바르지 않습니다. 설정에서 키를 확인해주세요.');
     else if (e.status === 402) showError('OpenRouter 크레딧이 부족합니다. 무료 모델을 선택하거나 크레딧을 충전해주세요.');
     else if (e.status === 429) showError('요청이 너무 많습니다. 잠시 후 다시 시도해주세요.');
+    else if (e.status === 400) showError('선택한 모델을 사용할 수 없습니다. 설정에서 다른 모델을 선택해주세요.');
     else {
       console.error(e);
       showError('오류가 발생했습니다. 네트워크 연결을 확인하고 잠시 후 다시 시도해주세요.');
