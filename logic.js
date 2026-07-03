@@ -40,7 +40,12 @@
       .slice(0, 5);
   }
 
-  const api = { normalizeWord, canAddWord, canRecommend, extractJSON, validateBooks };
+  function pickOpenLibraryCover(data) {
+    const doc = (data && Array.isArray(data.docs) ? data.docs : []).find(d => d && d.cover_i);
+    return doc ? 'https://covers.openlibrary.org/b/id/' + doc.cover_i + '-M.jpg' : null;
+  }
+
+  const api = { normalizeWord, canAddWord, canRecommend, extractJSON, validateBooks, pickOpenLibraryCover };
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = api;
   } else {

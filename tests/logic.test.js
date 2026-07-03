@@ -37,4 +37,13 @@ assert.deepStrictEqual(books[0], { title: '데미안', author: '헤르만 헤세
 assert.deepStrictEqual(books[1], { title: '한국책', author: '김작가', originalTitle: '', reason: '', summary: '' });
 assert.deepStrictEqual(L.validateBooks('배열아님'), []);
 
+// pickOpenLibraryCover: 검색 응답에서 첫 cover_i로 표지 URL 생성, 없으면 null
+assert.strictEqual(
+  L.pickOpenLibraryCover({ docs: [{ title: 'no cover' }, { title: 'Rich Dad', cover_i: 8315603 }] }),
+  'https://covers.openlibrary.org/b/id/8315603-M.jpg'
+);
+assert.strictEqual(L.pickOpenLibraryCover({ docs: [{ title: 'no cover' }] }), null);
+assert.strictEqual(L.pickOpenLibraryCover({}), null);
+assert.strictEqual(L.pickOpenLibraryCover(null), null);
+
 console.log('✅ 모든 로직 테스트 통과');

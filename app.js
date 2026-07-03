@@ -178,6 +178,16 @@ async function fetchCover(book) {
       if (item) return item.volumeInfo.imageLinks.thumbnail.replace(/^http:/, 'https:');
     } catch (e) { /* 다음 쿼리 시도 */ }
   }
+  // Google Books 실패 시(무료 사용량 소진 등) Open Library로 폴백.
+  // 한국어 검색은 지원이 약해 원제를 우선 사용한다.
+  for (const q of [book.originalTitle, book.title].filter(Boolean)) {
+    try {
+      const res = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=5&fields=cover_i`);
+      if (!res.ok) continue;
+      const url = BookLogic.pickOpenLibraryCover(await res.json());
+      if (url) return url;
+    } catch (e) { /* 다음 쿼리 시도 */ }
+  }
   return null;
 }
 
