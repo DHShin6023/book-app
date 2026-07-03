@@ -233,7 +233,10 @@ async function recommend() {
     if (e.status === 401) showError('API 키가 올바르지 않습니다. 설정에서 키를 확인해주세요.');
     else if (e.status === 402) showError('OpenRouter 크레딧이 부족합니다. 무료 모델을 선택하거나 크레딧을 충전해주세요.');
     else if (e.status === 429) showError('요청이 너무 많습니다. 잠시 후 다시 시도해주세요.');
-    else showError(`오류가 발생했습니다: ${e.message}`);
+    else {
+      console.error(e);
+      showError('오류가 발생했습니다. 네트워크 연결을 확인하고 잠시 후 다시 시도해주세요.');
+    }
   } finally {
     document.getElementById('loading').classList.add('hidden');
     btnRecommend.disabled = !L.canRecommend(words);
