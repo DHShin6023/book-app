@@ -51,8 +51,9 @@
     books.forEach((b, i) => {
       lines.push((i + 1) + '. ' + b.title + ' — ' + b.author);
       if (b.reason) lines.push('   ' + b.reason);
+      lines.push(''); // 책 사이(및 마지막 책과 링크 사이) 빈 줄
     });
-    lines.push('', '👉 ' + appUrl);
+    lines.push('👉 ' + appUrl);
     return lines.join('\n');
   }
 

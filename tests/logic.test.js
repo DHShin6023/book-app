@@ -59,6 +59,8 @@ assert.ok(shareText.includes('북 큐레이션'));
 assert.ok(shareText.includes('여행, 고독'));
 assert.ok(shareText.includes('1. 데미안 — 헤르만 헤세'));
 assert.ok(shareText.includes('2. 한국책 — 김작가'));
+assert.ok(shareText.includes('이유\n\n2. 한국책'), '책 사이에 빈 줄 필요');
+assert.ok(shareText.includes('김작가\n\n👉'), '마지막 책과 링크 사이에 빈 줄 필요');
 assert.ok(shareText.includes('https://dhshin6023.github.io/book-app/'));
 assert.strictEqual(L.buildShareText([], [], 'url').includes('undefined'), false);
 
